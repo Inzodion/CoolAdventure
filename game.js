@@ -82,6 +82,7 @@ class Guard extends AdventureScene {
                 if (this.hasItem("glass")){
                     this.showMessage("*Cool sunglasses, Welcome to Coolzville (Click to Enter)")
                     .on('pointerDown', () => {
+                        this.loseItem('shoe')
                         this.gotoScene('town');
                     })
                 } else {
@@ -90,7 +91,7 @@ class Guard extends AdventureScene {
                     .setInteractive()
                     .on('pointover', () => {
                         this.showMessage("Enter?")
-                        .on('pointerdiwn', () => {
+                        .on('pointerdown', () => {
                             this.gotoScene('town');
                             })
                         }) 
@@ -102,6 +103,35 @@ class Guard extends AdventureScene {
 class Town extends AdventureScene{
     constructor() {
         super("town");
+    }
+
+    onEnter() {
+        if (this.hasItem("shoe")){
+            this.add.text(500, 500, "HEY! We don't take too kindly to dry drip having people!")
+            this.add.text(500, 550, "*You decide its a good idea to run*")
+            this.add.text(500, 600, "*You run and end up tripping over a small cool rock and roll down into the dump*")
+            this.showMessage("click to get up")
+            .on('pointerdown', () => {
+                this.gotoScene('dump');
+            })
+        } else {
+            if (this.hasItem("glass"))
+            this.add.text(500, 500, "Hey cool Sunglasses, come sit and hang with us.")
+            this.add.text(500, 600, "You are cool")
+            this.add.text(500, 600, "*Click to Continue*")
+            .on('pointerdown', () => {
+                this.gotoScene('Outro');
+            })
+
+        }
+
+    }
+
+}
+
+class Dump extends AdventureScene{
+    constructor() {
+        super("dump");
     }
 
 }
@@ -129,7 +159,11 @@ class Outro extends Phaser.Scene {
     constructor() {
         super('outro');
     }
+    preload(){
+        this.load.image("Big Glass", "Sprites/Cool Guy.png");
+    }
     create() {
+        this.add.sprite(300, 200, "Big Glass");
         this.add.text(50, 50, "Thanks for Playing!").setFontSize(50);
         this.add.text(50, 100, "Click anywhere to restart.").setFontSize(20);
         this.input.on('pointerdown', () => this.scene.start('intro'));
@@ -144,7 +178,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Guard, Intro, Road, Town, Outro,],
+    scene: [Town, Intro, Road, Guard, Dump, Outro,], //remeber to put scene list in correct order at end!
     title: "To Be Cool",
 });
 
