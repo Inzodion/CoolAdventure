@@ -221,7 +221,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [ Intro, Road, Guard, Town, Dump, Outro,], //remeber to put scene list in correct order at end!
+    scene: [ Intro, Road, Guard, Town, Dump, Outro,],
     title: "To Be Cool",
 });
 
