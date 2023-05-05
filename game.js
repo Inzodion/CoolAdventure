@@ -71,9 +71,39 @@ class Guard extends AdventureScene {
     constructor() {
         super("guard");
     }
-    onEnter() {
-        let guard = this.add.text(this.w * 0.5, this.w * 0.15, "Guard").setFontSize(this.s * 2)
+    preload(){
+        this.load.image("guard", "Sprites/guard.png");
     }
+
+    onEnter() {
+    this.add.sprite(950, 650, "guard");
+        let guard = this.add.text(this.w * 0.45, this.w * 0.175, "Guard").setFontSize(this.s * 2)
+            .on('pointerover', () => {
+                if (this.hasItem("glass")){
+                    this.showMessage("*Cool sunglasses, Welcome to Coolzville (Click to Enter)")
+                    .on('pointerDown', () => {
+                        this.gotoScene('town');
+                    })
+                } else {
+                    (this.hasItem("shoe"))
+                    this.showMessage("Nice shoes but I don't think they will be cool enough")
+                    .setInteractive()
+                    .on('pointover', () => {
+                        this.showMessage("Enter?")
+                        .on('pointerdiwn', () => {
+                            this.gotoScene('town');
+                            })
+                        }) 
+                } 
+            })
+        }
+    }
+
+class Town extends AdventureScene{
+    constructor() {
+        super("town");
+    }
+
 }
 
 class Intro extends Phaser.Scene {
@@ -114,7 +144,7 @@ const game = new Phaser.Game({
         width: 1920,
         height: 1080
     },
-    scene: [Guard, Intro, Road, Outro],
+    scene: [Guard, Intro, Road, Town, Outro,],
     title: "To Be Cool",
 });
 
