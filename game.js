@@ -50,14 +50,13 @@ class Road extends AdventureScene {
             .setInteractive()
             .on('pointerover', () => {
                 if (this.hasItem("shoe")) {
-                    this.showMessage("You've got to get shoes before you can leave.");
+                    this.showMessage("Nice kicks, now you can be on your way.*click to continue*");
                 } else {
                     this.showMessage("You will need shoes on your journey. Can you find some shoes?");
                 }
             })
             .on('pointerdown', () => {
                 if (this.hasItem("shoe")) {
-                    this.loseItem("shoe");
                     this.showMessage("*crunch*");
                     sign.setText("you can walk the path");
                     this.gotoScene('guard');
@@ -69,7 +68,7 @@ class Road extends AdventureScene {
 
 class Guard extends AdventureScene {
     constructor() {
-        super("guard");
+        super("guard", "Entry way to Coolzville");
     }
     preload(){
         this.load.image("guard", "Sprites/guard.png");
@@ -80,27 +79,28 @@ class Guard extends AdventureScene {
         let guard = this.add.text(this.w * 0.45, this.w * 0.175, "Guard").setFontSize(this.s * 2)
             .setInteractive()
             .on('pointerover', () => {
-                if (this.hasItem("glass")){
+                if (this.hasItem("shoe")){
+                    this.showMessage("Nice shoes but I don't think they will be cool enough. *Click to enter*?")
+
+                } else {(this.hasItem("glass"))
                     this.showMessage("*Cool sunglasses, Welcome to Coolzville (Click to Enter)")
-                    .on('pointerDown', () => {
-                        this.loseItem('shoe')
-                        this.gotoScene('town');
-                    })
+                }
+            })
+            .setInteractive()
+            .on('pointerdown', () => {
+                if (this.hasItem("shoe")){
+                    this.gotoScene('town');
                 } else {
-                    (this.hasItem("shoe"))
-                    this.showMessage("Nice shoes but I don't think they will be cool enough. Do you wish to enter anyway?")
-                        .on('pointerdown', () => {
-                            this.gotoScene('town');
-                            })
-                
-                } 
+                    (this.hasItem("glass"))
+                        this.gotoScene('town');
+                }
             })
         }
     }
 
 class Town extends AdventureScene{
     constructor() {
-        super("town");
+        super("town", "Coolzville");
     }
     preload() {
         this.load.image("guyend", "Sprites/GuyEnd.png")
@@ -108,24 +108,37 @@ class Town extends AdventureScene{
 
     onEnter() {
         if (this.hasItem("shoe")){
-            this.add.text(500, 500, "HEY! We don't take too kindly to dry drip having people!")
-            this.add.text(500, 550, "*You decide its a good idea to run*")
-            this.add.text(500, 600, "*You run and end up tripping over a small cool rock and roll down into the dump*")
-            this.showMessage("click to get up")
-            .on('pointerdown', () => {
-                this.gotoScene('dump');
-            })
+            this.add.text(300, 500, "HEY! We don't take too kindly to dry drip having people!").setFontSize(this.s * 1.2)
+            this.add.text(300, 550, "*You decide its a good idea to run*").setFontSize(this.s * 1.2)
+            this.add.text(300, 600, "*You run and end up tripping over a small cool rock and roll down into the dump*").setFontSize(this.s * 1.2)
+            this.showMessage("click to get up");
         } else {
             if (this.hasItem("glass"))
-            this.add.text(500, 500, "Hey cool Sunglasses, come sit and hang with us.")
-            this.add.text(500, 600, "You are cool")
-            this.add.sprite(500, 620, "guyend")
-            this.add.text(500, 600, "*Click to Continue*")
-            .on('pointerdown', () => {
-                this.gotoScene('Outro');
-            })
-
+            this.add.text(400, 500, "Hey cool Sunglasses, come sit and hang with us.").setFontSize(this.s * 1.2)
+            this.add.text(400, 600, "You are cool").setFontSize(this.s * 1.2)
+            this.add.sprite(280, 620, "guyend")
+            this.add.text(400, 700, "*Click on Continue*").setFontSize(this.s * 1.2);
         }
+        let contiinue = this.add.text(450, 800, "CONTINUE").setFontSize(this.s * 2)
+        .setInteractive()
+        .on('pointerdown', () => {
+            if (this.hasItem("glass")){
+            this.gotoScene('outro');
+            }
+        })
+
+        let run = this.add.text(this.w * 0.5, this.w * 0.5, "RUN").setFontSize(this.s * 2.5)
+        .setInteractive()
+        .on('pointerover', () => this.showMessage("Run away from the haters!"))
+        .on('pointerdown', () => {
+            if (this.hasItem("shoe")){
+                this.loseItem("shoe")
+                this.gotoScene('dump');
+            } else {
+                (this.hasItem("glass"))
+                this.gotoScene('outro');
+            }
+        })
 
     }
 
@@ -133,7 +146,7 @@ class Town extends AdventureScene{
 
 class Dump extends AdventureScene {
     constructor() {
-        super("dump");
+        super("dump", "Dump");
     }
     onEnter () {
         let trash = this.add.text(this.w * 0.3, this.w * 0.3, "Trash")
@@ -152,16 +165,16 @@ class Dump extends AdventureScene {
                 this.showMessage("HEY! get you own sunglasses....did the rock just talk?");
         })
 
-        let glass = this.add.text(this.w *0.5, this.w * 0.6, "Sunglasses")
+        let glass = this.add.text(this.w * 0.35, this.w * 0.4, "Sun_glasses")
             .setFontSize(this.s * 2)
             .setInteractive()
-            .on('pointover', () => this.showMessage("huh, who would leave a cool pair of sunglasses?"))
+            .on('pointerover', () => this.showMessage("huh, who would leave a cool pair of sunglasses?"))
             .on('pointerdown', () => {
                 this.showMessage("You put on the Sunglasses")
                 this.gainItem('glass');
-            })
+        })
 
-        let button = this.add.text(this.w * 0.1, this.w * 1, "Leave?")
+        let button = this.add.text(this.w * 0.15, this.w * 0.4, "Leave?")
             .setFontSize(this.s * 2)
             .setInteractive()
             .on('pointerover', () => this.showMessage("Go back to the guard?"))
@@ -169,9 +182,9 @@ class Dump extends AdventureScene {
                 if (this.hasItem("glass")){
                     this.gotoScene('guard');
                 } else {
-                    this.showMessage("I need to be cool first I go back");
+                    this.showMessage("I need to be cool before I go back");
                 }
-            })
+        })
     }
     
 
