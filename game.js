@@ -89,7 +89,6 @@ class Guard extends AdventureScene {
                 } else {
                     (this.hasItem("shoe"))
                     this.showMessage("Nice shoes but I don't think they will be cool enough. Do you wish to enter anyway?")
-                        .setInteractive()
                         .on('pointerdown', () => {
                             this.gotoScene('town');
                             })
